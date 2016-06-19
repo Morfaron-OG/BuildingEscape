@@ -21,6 +21,9 @@ void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 
+	AActor *Owner = GetOwner();
+	FRotator NewRotation = FRotator(0.,12.,0.);
+	Owner->SetActorRotation(NewRotation);
 	// ...
 	
 }
