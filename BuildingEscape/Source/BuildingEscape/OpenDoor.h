@@ -19,7 +19,7 @@ public:
 	virtual void BeginPlay() override;
 
 	void OpenDoor();
-	
+	void CloseDoor();
 	// Called every frame
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 
@@ -31,5 +31,5 @@ private:
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* PressurePlate;
 
-	AActor* ActorThatOpens;// = GetWorld()->GetFirstPlayerController()->GetPawn();
+	AActor* ActorThatOpens;
 };
