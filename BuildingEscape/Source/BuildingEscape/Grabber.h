@@ -17,12 +17,22 @@ public:
 
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	
+
 	// Called every frame
-	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
+	virtual void TickComponent( float DeltaTime, ELevelTick TickType, 
+		FActorComponentTickFunction* ThisTickFunction ) override;
 
 private:
 	UPROPERTY(EditAnywhere)
 	float Reach = 100.f;
 	
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+	UInputComponent* InputHandle = nullptr;
+
+	void Grab();
+	void Release();
+
+	void FindPhysicsHandleComponent();
+	void SetupInputComponent();
+	const FHitResult GetFirstPhysicsBodyInReach();
 };
