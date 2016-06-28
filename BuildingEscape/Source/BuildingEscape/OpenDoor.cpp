@@ -7,7 +7,8 @@
 // Sets default values for this component's properties
 UOpenDoor::UOpenDoor()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+	// Set this component to be initialized when the game starts,
+	// and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	bWantsBeginPlay = true;
 	PrimaryComponentTick.bCanEverTick = true;
@@ -22,19 +23,19 @@ void UOpenDoor::BeginPlay()
 	Super::BeginPlay();
 
 	Owner = GetOwner();
-	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 	// ...
 	
 }
 
 
 // Called every frame
-void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
+void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType, 
+	FActorComponentTickFunction* ThisTickFunction )
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
 	// Poll the trigger volume
-	if (PressurePlate->IsOverlappingActor(ActorThatOpens))
+	if (GetTotalMassOfActorsOnPlate() > TriggerMass)
 	{
 		OpenDoor();
 		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
@@ -54,4 +55,25 @@ void UOpenDoor::OpenDoor()
 void UOpenDoor::CloseDoor()
 {
 	Owner->SetActorRotation(FRotator(0., CloseAngle, 0.));
+}
+
+float UOpenDoor::GetTotalMassOfActorsOnPlate()
+{
+	float TotalMass = 0.f;
+	if (PressurePlate)
+	{
+		TArray<AActor*> OverlappingActors;
+		TArray<UPrimitiveComponent*> ActorComponents;
+		PressurePlate->GetOverlappingActors(OverlappingActors);
+		for (const auto& OverlappingActor : OverlappingActors)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Actor name is %s!"), 
+				*OverlappingActor->GetName());
+			
+			TotalMass += OverlappingActor->
+				FindComponentByClass<UPrimitiveComponent>()->GetMass();
+		}
+	}
+	UE_LOG(LogTemp, Warning, TEXT("weight is %f!"), TotalMass);
+	return TotalMass;
 }
