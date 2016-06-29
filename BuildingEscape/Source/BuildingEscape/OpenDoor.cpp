@@ -57,12 +57,13 @@ void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType,
 
 void UOpenDoor::OpenDoor()
 {
-	GetOwner()->SetActorRotation(FRotator(0., OpenAngle, 0.));
+	//GetOwner()->SetActorRotation(FRotator(0., OpenAngle, 0.));
+	OnOpenRequest.Broadcast();
 }
 
 void UOpenDoor::CloseDoor()
 {
-	GetOwner()->SetActorRotation(FRotator(0., CloseAngle, 0.));
+	//GetOwner()->SetActorRotation(FRotator(0., CloseAngle, 0.));
 }
 
 float UOpenDoor::GetTotalMassOfActorsOnPlate()
