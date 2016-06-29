@@ -22,7 +22,13 @@ void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Owner = GetOwner();
+	if (!PressurePlate)
+	{
+		UE_LOG(LogTemp, Error,
+			TEXT("No trigger volume assigned to open door %s"),
+			*GetOwner()->GetName());
+		return;
+	}
 	// ...
 	
 }
@@ -33,6 +39,8 @@ void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType,
 	FActorComponentTickFunction* ThisTickFunction )
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
+
+	if (!PressurePlate) { return; }
 
 	// Poll the trigger volume
 	if (GetTotalMassOfActorsOnPlate() >= TriggerMass)
@@ -49,12 +57,12 @@ void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType,
 
 void UOpenDoor::OpenDoor()
 {
-	Owner->SetActorRotation(FRotator(0., OpenAngle, 0.));
+	GetOwner()->SetActorRotation(FRotator(0., OpenAngle, 0.));
 }
 
 void UOpenDoor::CloseDoor()
 {
-	Owner->SetActorRotation(FRotator(0., CloseAngle, 0.));
+	GetOwner()->SetActorRotation(FRotator(0., CloseAngle, 0.));
 }
 
 float UOpenDoor::GetTotalMassOfActorsOnPlate()

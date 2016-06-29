@@ -32,6 +32,9 @@ void UGrabber::TickComponent( float DeltaTime, ELevelTick TickType,
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
 	// ...
+	if (!PhysicsHandle){return;}
+	if (!InputHandle) {return;}
+
 	if (PhysicsHandle->GrabbedComponent)
 	{
 		PhysicsHandle->SetTargetLocation(FindLineTraceEnd());
@@ -47,6 +50,7 @@ void UGrabber::FindPhysicsHandleComponent()
 	{
 		UE_LOG(LogTemp, Error, TEXT("No physics handle found for %s!"),
 			*GetOwner()->GetName());
+		return;
 	}
 }
 
@@ -62,6 +66,7 @@ void UGrabber::SetupInputComponent()
 	{
 		UE_LOG(LogTemp, Error, TEXT("No input handle found for %s!"),
 			*GetOwner()->GetName());
+		return;
 	}
 }
 
@@ -73,6 +78,7 @@ void UGrabber::Grab()
 
 	if (ActorHit)
 	{
+		if (!PhysicsHandle) { return; }
 		PhysicsHandle->GrabComponent(ComponentToGrab,
 			NAME_None, ComponentToGrab->GetOwner()->GetActorLocation(),
 			true);
@@ -81,6 +87,7 @@ void UGrabber::Grab()
 
 void UGrabber::Release()
 {
+	if (!PhysicsHandle) { return; }
 	PhysicsHandle->ReleaseComponent();
 }
 
