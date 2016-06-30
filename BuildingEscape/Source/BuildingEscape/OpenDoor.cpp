@@ -45,25 +45,13 @@ void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType,
 	// Poll the trigger volume
 	if (GetTotalMassOfActorsOnPlate() >= TriggerMass)
 	{
-		OpenDoor();
-		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
+		OnOpenRequest.Broadcast();
 	}
-	else if (GetWorld()->GetTimeSeconds() >= (LastDoorOpenTime + DoorCloseDelay))
+	else
 	{
-		CloseDoor();
+		OnCloseRequest.Broadcast();
 	}
 	
-}
-
-void UOpenDoor::OpenDoor()
-{
-	//GetOwner()->SetActorRotation(FRotator(0., OpenAngle, 0.));
-	OnOpenRequest.Broadcast();
-}
-
-void UOpenDoor::CloseDoor()
-{
-	//GetOwner()->SetActorRotation(FRotator(0., CloseAngle, 0.));
 }
 
 float UOpenDoor::GetTotalMassOfActorsOnPlate()
